@@ -464,7 +464,7 @@ class RidgeFitter(object):
 
     def _findApex(self, init_centre, init_normal):
 
-        slice = self.image.createSubSliceNormal(init_centre, init_normal, sliceShape=self.sliceShape)
+        slice = self.image.createSubSliceNormal(init_centre, init_normal, slice_shape=self.sliceShape)
         slice.fitQuadratic()
         sliceApex = slice.getQuadraticMidpoint()
         apex = slice.slice2StackCS(sliceApex)

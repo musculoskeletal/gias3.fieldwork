@@ -25,10 +25,10 @@ from scipy.interpolate import splprep, splev, splrep
 from scipy.optimize import fmin
 from scipy.spatial import cKDTree
 
-import gias3.fieldwork.field.ensemble_field_function as EFF
 from gias3.common import math
 from gias3.common import transform3D
 from gias3.fieldwork.field import template_fields
+from gias3.fieldwork.field import ensemble_field_function as EFF
 from gias3.fieldwork.field.tools import curvature_tools as CT
 from gias3.fieldwork.field.tools import discretisation
 from gias3.fieldwork.field.tools import misc
