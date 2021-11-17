@@ -240,7 +240,7 @@ class MeshFitter(object):
             slaveGObj = GFF.makeObj2Way(slaveGF, self.data, self.HMFSlaveEPD)
 
         slaveSobObj = GFF.makeSobelovPenalty2D(slaveGF, self.HMFSlaveSobD, self.HMFSlaveSobW)
-        slaveNormalSmoother = GFF.normalSmoother2(slaveGF.EnsembleFieldFunction.flatten()[0])
+        slaveNormalSmoother = GFF.normalSmoother2(slaveGF.ensemble_field_function.flatten()[0])
         slaveNormObj = slaveNormalSmoother.makeObj(self.HMFSlaveNormD)
 
         def slaveObj(x):
@@ -286,7 +286,7 @@ class MeshFitter(object):
             slaveGObj = GFF.makeObj2Way(slaveGF, self.data, self.HMFSlaveEPD)
 
         slaveSobObj = GFF.makeSobelovPenalty2D(slaveGF, self.HMFSlaveSobD, self.HMFSlaveSobW)
-        slaveNormalSmoother = GFF.normalSmoother2(slaveGF.EnsembleFieldFunction.flatten()[0])
+        slaveNormalSmoother = GFF.normalSmoother2(slaveGF.ensemble_field_function.flatten()[0])
         slaveNormObj = slaveNormalSmoother.makeObj(self.HMFSlaveNormD)
 
         def slaveObj(x):

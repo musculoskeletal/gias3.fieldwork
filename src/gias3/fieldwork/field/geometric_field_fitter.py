@@ -301,14 +301,14 @@ class geometryFit(object):
             # ~ savetxt( 'host_mesh_fitting/slaveXi.txt', slaveXi )
 
         # calc host basis values at slaveXis
-        hostElem = host.EnsembleFieldFunction.mesh.elements[0]
-        evaluator = host.EnsembleFieldFunction.evaluators[hostElem.type]
-        basisFunction = host.EnsembleFieldFunction.basis[hostElem.type]
+        hostElem = host.ensemble_field_function.mesh.elements[0]
+        evaluator = host.ensemble_field_function.evaluators[hostElem.type]
+        basisFunction = host.ensemble_field_function.basis[hostElem.type]
         slaveBasis = basisFunction.eval(slave_xi.T)
 
         # initialise smoothing for host mesh
         hostParam0 = host.field_parameters.copy()
-        smoother = elementDotPenalty3D(host.EnsembleFieldFunction, smooth_d, hostParam0, smooth_w)
+        smoother = elementDotPenalty3D(host.ensemble_field_function, smooth_d, hostParam0, smooth_w)
         smoothErr = array([])
 
         # hostmesh obj function
@@ -1740,7 +1740,7 @@ class normalSmoother(object):
         edges.
         """
         self.G = G
-        self.F = self.G.EnsembleFieldFunction
+        self.F = self.G.ensemble_field_function
         self.nW = nW
         self.cW = cW
         self.d = d
@@ -2273,7 +2273,7 @@ def makeQuadraticCube(x_range, y_range, z_range):
     F.set_new_mesh('host')
     F.create_elements('quad333', 1)
     F.map_parameters()
-    G = geometric_field.geometric_field('host', 3, ensemble_field_function=F)
+    G = geometric_field.GeometricField('host', 3, ensemble_field_function=F)
 
     x = list(linspace(x_range[0], x_range[1], 3)) * 9
     x = array(x)
@@ -2291,7 +2291,7 @@ def makeQuadraticCubeMulti(x_range, y_range, z_range, discretisation):
     F = EFF.EnsembleFieldFunction('host', 3, debug=0)
     F.set_basis({'quad333': 'quad_L2_L2_L2'})
     F.set_new_mesh('host')
-    G = geometric_field.geometric_field('host', 3, ensemble_field_function=F)
+    G = geometric_field.GeometricField('host', 3, ensemble_field_function=F)
 
     # generate global nodes
     x = linspace(x_range[0], x_range[1], 3 + (discretisation[0] - 1) * 2)
@@ -2332,7 +2332,7 @@ def makeCubicCube(x_range, y_range, z_range):
     F.set_new_mesh('host')
     F.create_elements('quad444', 1)
     F.map_parameters()
-    G = geometric_field.geometric_field('host', 3, ensemble_field_function=F)
+    G = geometric_field.GeometricField('host', 3, ensemble_field_function=F)
 
     x = list(linspace(x_range[0], x_range[1], 4)) * 16
     x = array(x)
@@ -2350,7 +2350,7 @@ def makeCubicCubeMulti(x_range, y_range, z_range, discretisation):
     F = EFF.EnsembleFieldFunction('host', 3, debug=0)
     F.set_basis({'quad444': 'quad_L3_L3_L3'})
     F.set_new_mesh('host')
-    G = geometric_field.geometric_field('host', 3, ensemble_field_function=F)
+    G = geometric_field.GeometricField('host', 3, ensemble_field_function=F)
 
     # generate global nodes
     x = linspace(x_range[0], x_range[1], 4 + (discretisation[0] - 1) * 3)
@@ -2391,7 +2391,7 @@ def makeQuarticCube(x_range, y_range, z_range):
     F.set_new_mesh('host')
     F.create_elements('quad555', 1)
     F.map_parameters()
-    G = geometric_field.geometric_field('host', 3, ensemble_field_function=F)
+    G = geometric_field.GeometricField('host', 3, ensemble_field_function=F)
 
     x = list(linspace(x_range[0], x_range[1], 5)) * 25
     x = array(x)
@@ -2409,7 +2409,7 @@ def makeQuarticCubeMulti(x_range, y_range, z_range, discretisation):
     F = EFF.EnsembleFieldFunction('host', 3, debug=0)
     F.set_basis({'quad555': 'quad_L4_L4_L4'})
     F.set_new_mesh('host')
-    G = geometric_field.geometric_field('host', 3, ensemble_field_function=F)
+    G = geometric_field.GeometricField('host', 3, ensemble_field_function=F)
 
     # generate global nodes
     x = linspace(x_range[0], x_range[1], 5 + (discretisation[0] - 1) * 4)
@@ -2475,7 +2475,7 @@ def makeHostMeshMulti(P, pad, elem_type, discretisation):
 def viewHostMesh(m, d, figure):
     scale = 0.5
     radius = 1.0
-    edges = m.EnsembleFieldFunction.mesh.elements[0].edge_points
+    edges = m.ensemble_field_function.mesh.elements[0].edge_points
     v = m.evaluate_geometric_field(d)
     if figure is None:
         figure = geometric_field.mlab.figure()

@@ -544,7 +544,7 @@ def fitBoundaryCurveDPEP(curve_gf, data, GD, sob_w, tangent_w, it_max=10, n_clos
     tree_args = {} if tree_args is None else tree_args
 
     sobObj = GFF.makeSobelovPenalty1D(curve_gf, GD, sob_w)
-    tangentSmoother = GFF.tangentSmoother(curve_gf.EnsembleFieldFunction)
+    tangentSmoother = GFF.tangentSmoother(curve_gf.ensemble_field_function)
     nObj = tangentSmoother.makeObj()
 
     gObj = GFF.makeObjDPEP(curve_gf, data, GD, dataWeights=None, n_closest_points=n_closest_points, tree_args=tree_args)
@@ -572,10 +572,10 @@ def fitSurfaceDPEP(GF, data, GD, sob_w, normal_d, normal_w, it_max=10, data_weig
     tree_args = {} if tree_args is None else tree_args
 
     sobObj = GFF.makeSobelovPenalty2D(GF, GD, sob_w)
-    normalSmoother = GFF.normalSmoother2(GF.EnsembleFieldFunction.flatten()[0])
+    normalSmoother = GFF.normalSmoother2(GF.ensemble_field_function.flatten()[0])
     nObj = normalSmoother.makeObj(normal_d)
 
-    gObj = GFF.makeObjDPEP(GF, data, GD, dataWeights=data_weights, n_closest_points=n_closest_points, tree_args=tree_args)
+    gObj = GFF.makeObjDPEP(GF, data, GD, data_weights=data_weights, n_closest_points=n_closest_points, tree_args=tree_args)
     obj = combObjGeomSobNormalStack(gObj, sobObj, nObj, 1.0, normal_w)
 
     # initialise geometric field fitter
@@ -604,10 +604,10 @@ def fitSurfaceDPEPFixNodes(GF, data, GD, sob_w, normal_d, normal_w, fixed_nodes,
     nonFixedInd = np.where(P0.ravel() != -99999)
 
     sobObj = GFF.makeSobelovPenalty2D(GF, GD, sob_w)
-    normalSmoother = GFF.normalSmoother2(GF.EnsembleFieldFunction.flatten()[0])
+    normalSmoother = GFF.normalSmoother2(GF.ensemble_field_function.flatten()[0])
     nObj = normalSmoother.makeObj(normal_d)
 
-    gObj = GFF.makeObjDPEP(GF, data, GD, dataWeights=data_weights, n_closest_points=n_closest_points, tree_args=tree_args)
+    gObj = GFF.makeObjDPEP(GF, data, GD, data_weights=data_weights, n_closest_points=n_closest_points, tree_args=tree_args)
     obj = combObjGeomSobNormalStack(gObj, sobObj, nObj, 1.0, normal_w)
 
     X = GF.get_field_parameters().ravel()
@@ -639,7 +639,7 @@ def fitBoundaryCurveEPDP(curve_gf, data, GD, sob_w, tangent_w, it_max=10, n_clos
     tree_args = {} if tree_args is None else tree_args
 
     sobObj = GFF.makeSobelovPenalty1D(curve_gf, GD, sob_w)
-    tangentSmoother = GFF.tangentSmoother(curve_gf.EnsembleFieldFunction)
+    tangentSmoother = GFF.tangentSmoother(curve_gf.ensemble_field_function)
     nObj = tangentSmoother.makeObj()
 
     gObj = GFF.makeObjEPDP(curve_gf, data, GD, data_weights=None, n_closest_points=n_closest_points, tree_args=tree_args)
@@ -667,7 +667,7 @@ def fitSurfaceEPDP(GF, data, GD, sob_w, normal_d, normal_w, it_max=10, data_weig
     tree_args = {} if tree_args is None else tree_args
 
     sobObj = GFF.makeSobelovPenalty2D(GF, GD, sob_w)
-    normalSmoother = GFF.normalSmoother2(GF.EnsembleFieldFunction.flatten()[0])
+    normalSmoother = GFF.normalSmoother2(GF.ensemble_field_function.flatten()[0])
     nObj = normalSmoother.makeObj(normal_d)
 
     gObj = GFF.makeObjEPDP(GF, data, GD, data_weights=data_weights, n_closest_points=n_closest_points, tree_args=tree_args)
@@ -700,7 +700,7 @@ def fitSurfaceEPDPFixNodes(GF, data, GD, sob_w, normal_d, normal_w, fixed_nodes,
     nonFixedInd = np.where(P0.ravel() != -99999)
 
     sobObj = GFF.makeSobelovPenalty2D(GF, GD, sob_w)
-    normalSmoother = GFF.normalSmoother2(GF.EnsembleFieldFunction.flatten()[0])
+    normalSmoother = GFF.normalSmoother2(GF.ensemble_field_function.flatten()[0])
     nObj = normalSmoother.makeObj(normal_d)
 
     gObj = GFF.makeObjEPDP(GF, data, GD, data_weights=data_weights, n_closest_points=n_closest_points, tree_args=tree_args)
@@ -734,7 +734,7 @@ def fitBoundaryCurve2Way(curve_gf, data, GD, sob_w, tangent_w, it_max=10, n_clos
     tree_args = {} if tree_args is None else tree_args
 
     sobObj = GFF.makeSobelovPenalty1D(curve_gf, GD, sob_w)
-    tangentSmoother = GFF.tangentSmoother(curve_gf.EnsembleFieldFunction)
+    tangentSmoother = GFF.tangentSmoother(curve_gf.ensemble_field_function)
     nObj = tangentSmoother.makeObj()
     gObj = GFF.makeObj2Way(curve_gf, data, GD, data_weights=None, n_closest_points=n_closest_points, tree_args=tree_args)
 
@@ -766,7 +766,7 @@ def fitSurface2Way(GF, data, GD, sob_w, normal_d, normal_w, dataWeights=None, it
     tree_args = {} if tree_args is None else tree_args
 
     sobObj = GFF.makeSobelovPenalty2D(GF, GD, sob_w)
-    normalSmoother = GFF.normalSmoother(GF.EnsembleFieldFunction.flatten()[0])
+    normalSmoother = GFF.normalSmoother(GF.ensemble_field_function.flatten()[0])
     nObj = normalSmoother.makeObj(normal_d)
     gObj = GFF.makeObj2Way(GF, data, GD, data_weights=dataWeights, n_closest_points=n_closest_points, tree_args=tree_args)
 
@@ -803,7 +803,7 @@ def fitBoundaryCurve2WayFixNodes(curve_gf, data, GD, sob_w, tangent_w, fixed_nod
     nonFixedInd = np.where(P0.ravel() != -99999)
 
     sobObj = GFF.makeSobelovPenalty1D(curve_gf, GD, sob_w)
-    tangentSmoother = GFF.tangentSmoother(curve_gf.EnsembleFieldFunction)
+    tangentSmoother = GFF.tangentSmoother(curve_gf.ensemble_field_function)
     nObj = tangentSmoother.makeObj()
     gObj = GFF.makeObj2Way(curve_gf, data, GD, data_weights=None, n_closest_points=n_closest_points, tree_args=tree_args)
     obj = combObjGeomSobNormalStack(gObj, sobObj, nObj, 1.0, tangent_w)
@@ -847,7 +847,7 @@ def fitSurface2WayFixNodes(GF, data, GD, sob_w, normal_d, normal_w, fixed_nodes,
     nonFixedInd = np.where(P0.ravel() != -99999)
 
     sobObj = GFF.makeSobelovPenalty2D(GF, GD, sob_w)
-    normalSmoother = GFF.normalSmoother2(GF.EnsembleFieldFunction.flatten()[0])
+    normalSmoother = GFF.normalSmoother2(GF.ensemble_field_function.flatten()[0])
     nObj = normalSmoother.makeObj(normal_d)
     gObj = GFF.makeObj2Way(GF, data, GD, data_weights=data_weights, n_closest_points=n_closest_points, tree_args=tree_args)
     obj = combObjGeomSobNormalStack(gObj, sobObj, nObj, 1.0, normal_w)
@@ -903,10 +903,10 @@ def fitSurface(g_obj_type, GF, data, GD, sob_d, sob_w, normal_d, normal_w,
     if sob_obj is None:
         sob_obj = GFF.makeSobelovPenalty2D(GF, sob_d, sob_w)
     if n_obj is None:
-        normalSmoother = GFF.normalSmoother2(GF.EnsembleFieldFunction.flatten()[0])
+        normalSmoother = GFF.normalSmoother2(GF.ensemble_field_function.flatten()[0])
         n_obj = normalSmoother.makeObj(normal_d)
     if g_obj is None:
-        g_obj = gObjMakers[g_obj_type](GF, data, GD, dataWeights=data_weights,
+        g_obj = gObjMakers[g_obj_type](GF, data, GD, data_weights=data_weights,
                                        n_closest_points=n_closest_points, tree_args=tree_args,
                                        evaluator=gf_eval
                                        )
@@ -943,10 +943,10 @@ def fitSurfaceFixNodes(g_obj_type, GF, data, GD, sob_d, sob_w, normal_d, normal_
     if sob_obj is None:
         sob_obj = GFF.makeSobelovPenalty2D(GF, sob_d, sob_w)
     if n_obj is None:
-        normalSmoother = GFF.normalSmoother2(GF.EnsembleFieldFunction.flatten()[0])
+        normalSmoother = GFF.normalSmoother2(GF.ensemble_field_function.flatten()[0])
         n_obj = normalSmoother.makeObj(normal_d)
     if g_obj is None:
-        g_obj = gObjMakers[g_obj_type](GF, data, GD, dataWeights=data_weights,
+        g_obj = gObjMakers[g_obj_type](GF, data, GD, data_weights=data_weights,
                                        n_closest_points=n_closest_points, tree_args=tree_args, evaluator=gf_eval
                                        )
 
@@ -1031,7 +1031,7 @@ def fitSurfacePerItSearch(g_obj_type, GF, data, GD, sob_d, sob_w, normal_d, norm
         log.debug('it_maxPerIt:', it_max_per_it)
 
     sobObj = GFF.makeSobelovPenalty2D(GF, sob_d, sob_w)
-    normalSmoother = GFF.normalSmoother2(GF.EnsembleFieldFunction.flatten()[0])
+    normalSmoother = GFF.normalSmoother2(GF.ensemble_field_function.flatten()[0])
     nObj = normalSmoother.makeObj(normal_d)
     useGFEval = False
 
@@ -1322,7 +1322,7 @@ def hostMeshFitMultiPerItSearch(data, host_gf, slave_gf, slave_g_obj_type, slave
 
     # init slave functions
     slaveSobObj = GFF.makeSobelovPenalty2D(slave_gf, slave_sob_d, slave_sob_w)
-    slaveNormalSmoother = GFF.normalSmoother2(slave_gf.EnsembleFieldFunction.flatten()[0])
+    slaveNormalSmoother = GFF.normalSmoother2(slave_gf.ensemble_field_function.flatten()[0])
     slaveNObj = slaveNormalSmoother.makeObj(slave_nd)
     if slave_g_obj_type == 'EPDP':
         slaveGFEval = geometric_field.makeGeometricFieldEvaluatorSparse(
@@ -1524,9 +1524,9 @@ def getClosestDataPoints(data, L, d, n, DUB):
 
 
 def fitterFit(GF, epD, data, fit=None, max_it=100, drms=0.0, output=True, do_fit=True):
-    originalEFF = GF.EnsembleFieldFunction
-    if not GF.EnsembleFieldFunction.is_flat():
-        GF.EnsembleFieldFunction = GF.EnsembleFieldFunction.flatten()[0]
+    originalEFF = GF.ensemble_field_function
+    if not GF.ensemble_field_function.is_flat():
+        GF.ensemble_field_function = GF.ensemble_field_function.flatten()[0]
 
     if fit is None:
         fit = fitter.Fit()
@@ -1542,7 +1542,7 @@ def fitterFit(GF, epD, data, fit=None, max_it=100, drms=0.0, output=True, do_fit
     else:
         rmsErr = None
 
-    GF.EnsembleFieldFunction = originalEFF
+    GF.ensemble_field_function = originalEFF
 
     return fit, rmsErr
 
@@ -1574,7 +1574,7 @@ def calcDPEPErrors(data, GF):
     """
     GF.flatten_ensemble_field_function()
     mp, p, d = GF.find_closest_material_points(data, init_gd=[10, 10], verbose=True)
-    GF.EnsembleFieldFunction = GF.ensemble_field_function_old
+    GF.ensemble_field_function = GF.ensemble_field_function_old
     rms = calcRMS(d)
     return d, rms
 
@@ -1593,7 +1593,7 @@ def calcEPDPEPErrors(data, GF, ep_d):
     # find closest material points to closestData
     GF.flatten_ensemble_field_function()
     mp, p, d = GF.find_closest_material_points(closestData, init_gd=[10, 10], verbose=True)
-    GF.EnsembleFieldFunction = GF.ensemble_field_function_old
+    GF.ensemble_field_function = GF.ensemble_field_function_old
     rms = calcRMS(d)
     return d, rms
 

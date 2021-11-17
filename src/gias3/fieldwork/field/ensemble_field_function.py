@@ -4,7 +4,7 @@ LAST MODIFIED: 24-12-2015
 DESCRIPTION:
 Classes for combining information and functions of mesh topology
 (topology.mesh.mesh_ensemble, element.element_types), basis 
-(basis.basis), and mapping (mapper.mapper)
+(basis.basis), and mapping (mapper.Mapper)
 
 ===============================================================================
 This file is part of GIAS2. (https://bitbucket.org/jangle/gias2)
@@ -184,7 +184,7 @@ class EnsembleFieldFunction:
         self.basis = {}  # basis object dictionary { element.type: <basis_obj> }
         self.basis_types = []  # string
         self.mesh = None  # mesh_ensemble object
-        self.mapper = mapper.mapper()  # parameter mapper object
+        self.mapper = mapper.Mapper()  # parameter mapper object
         self.parameters = None
         self.subfields = {}  # {element_number: subfield}
         # ~ self.submesh_map = {}            # {submesh: corresponding subfield}

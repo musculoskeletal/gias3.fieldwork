@@ -50,7 +50,7 @@ except ImportError:
 # def normaliseVector(x):
 #     return x/numpy.sqrt((x**2.0).sum())
 
-class geometric_field:
+class GeometricField:
     """ Class for an ensemble_field representing the geometry of an 
     object. Either instantiated with an existing ensemble_field, or if 
     none, a new ensemble_field will be instantiated from the 
@@ -80,7 +80,7 @@ class geometric_field:
             # create the appropriate number of geometric points for the ensemble
             # points in the mesh
             self.ensemble_field_function = ensemble_field_function
-            self._create_ensemble_points()
+            self.create_ensemble_points()
             try:
                 self.ensemble_field_function_filename = self.ensemble_field_function.filename
             except AttributeError:
@@ -186,7 +186,7 @@ class geometric_field:
                 f.write(line)
 
     # ==================================================================#
-    def _create_ensemble_points(self):
+    def create_ensemble_points(self):
         """ Creates a geometric point for each ensemble point in the
         ensemble field function upon instantiation with an existing 
         ensemble_field_function
@@ -197,7 +197,7 @@ class geometric_field:
 
         for i in range(n_points):
             # make geometric_point object
-            point = geometric_point(self.dimensions, ensemble_point_number=i)
+            point = GeometricPoint(self.dimensions, ensemble_point_number=i)
             self.points.append(point)
             self.ensemble_to_points_map[i] = self.points_counter
             self.points_to_ensemble_map[self.points_counter] = i
@@ -341,7 +341,7 @@ class geometric_field:
         if len(field_parameters) != self.dimensions:
             raise ValueError('ERROR: geometric_field.add_point: parameters length/dimension mismatch')
 
-        self.points.append(geometric_point(self.dimensions, numpy.array(field_parameters)))
+        self.points.append(GeometricPoint(self.dimensions, numpy.array(field_parameters)))
         if name:
             self.named_points_map[name] = self.points_counter
 
@@ -1564,7 +1564,7 @@ class geometric_field:
         global points points. elemBasisMap = {elemtype:basistype}
         """
 
-        lineGF = geometric_field('line', 3, field_dimensions=1, field_basis=elem_basis_map)
+        lineGF = GeometricField('line', 3, field_dimensions=1, field_basis=elem_basis_map)
         params = self.field_parameters[:, points, :].copy()
         nElems = (len(points) - 1) / (nodes_per_elem - 1)
 
@@ -1593,7 +1593,7 @@ class geometric_field:
             basis functions, i.e. {elemtype:basistype}
         """
 
-        lineGF = geometric_field('line', 3, field_dimensions=1, field_basis=elem_basis_map)
+        lineGF = GeometricField('line', 3, field_dimensions=1, field_basis=elem_basis_map)
         params = self.field_parameters.copy()
 
         # assume only one type of elements and basis   
@@ -1609,7 +1609,7 @@ class geometric_field:
     def makeElementBoundaryCurve(self, elem_number, n_nodes_elem_type_map, elem_basis_map):
 
         bNodes = self.ensemble_field_function.get_element_boundary_nodes(elem_number)
-        lineGF = geometric_field('line', 3, field_dimensions=1, field_basis=elem_basis_map)
+        lineGF = GeometricField('line', 3, field_dimensions=1, field_basis=elem_basis_map)
 
         for edgeNodes in bNodes:
             e = element_types.create_element(n_nodes_elem_type_map[len(edgeNodes)])
@@ -1805,7 +1805,7 @@ class geometric_field:
         else:
             if name is None:
                 name = self.name + '_subfield_' + str(elem_i)
-            newGF = geometric_field(name, self.dimensions, ensemble_field_function=subfield)
+            newGF = GeometricField(name, self.dimensions, ensemble_field_function=subfield)
             newParamsI = []
             paramMap = self.ensemble_field_function.mapper._element_to_ensemble_map[elem_i]
             for k in list(paramMap.keys()):
@@ -1820,8 +1820,8 @@ class geometric_field:
         """
         make a new GF from specified elements
         """
-        newGF = geometric_field(name, self.dimensions, field_dimensions=self.ensemble_field_function.dimensions,
-                                field_basis=basis_types)
+        newGF = GeometricField(name, self.dimensions, field_dimensions=self.ensemble_field_function.dimensions,
+                               field_basis=basis_types)
         for e in elements:
             if not self.ensemble_field_function.is_flat():
                 elem = self.ensemble_field_function.subfields[e]
@@ -2046,7 +2046,7 @@ class geometric_field:
 
 
 # ======================================================================#
-class geometric_point(object):
+class GeometricPoint(object):
     """ Class of point objects used by geometric_field. Assumes field parameters
     are given as a 2D array with shape = (dimensions, number of parameters per dimensions)
     """
@@ -2189,7 +2189,7 @@ def smoothCurvField(points, curvature):
 def makeGeometricFieldEvaluator(G, eval_d):
     # G should be flat
 
-    f = G.EnsembleFieldFunction
+    f = G.ensemble_field_function
 
     # calculate static basis values for the required evalD
     basisValues = {}
@@ -2242,7 +2242,7 @@ def makeGeometricFieldEvaluatorSparse(G, eval_d, ep_index=None, ep_xi=None, mat_
     element xi coordinates at which the field is to be evaluated
     """
 
-    f = G.EnsembleFieldFunction
+    f = G.ensemble_field_function
     if not f.is_flat():
         f = f.flatten()[0]
 
@@ -2391,9 +2391,9 @@ def makeGeometricFieldDerivativesEvaluatorSparse(G, eval_d, dim=3, ep_index=None
     epIndex, if defined, is a list of the row numbers (ep numbers) that
     should be in the final system. All other rows are droppped
     """
-    f0 = G.EnsembleFieldFunction
+    f0 = G.ensemble_field_function
     f = f0.flatten()[0]
-    G.EnsembleFieldFunction = f
+    G.ensemble_field_function = f
 
     if eval_d is None:
         ep = ep_xi
@@ -2408,7 +2408,7 @@ def makeGeometricFieldDerivativesEvaluatorSparse(G, eval_d, dim=3, ep_index=None
         nEPs = ep.shape[1]
         epMode = 2
 
-    nDerivs = int(G.EnsembleFieldFunction.dimensions ** 2 + 1)
+    nDerivs = int(G.ensemble_field_function.dimensions ** 2 + 1)
 
     # calculate static basis values for the required evalD and assemble
     # matrices
@@ -2474,7 +2474,7 @@ def makeArclengthEvalDisc(c, d):
 
     ceval = makeGeometricFieldEvaluatorSparse(c, [d, ])
     p = numpy.array(c.field_parameters)
-    n_elems = c.EnsembleFieldFunction.mesh.get_number_of_true_elements()
+    n_elems = c.ensemble_field_function.mesh.get_number_of_true_elements()
 
     def f(p):
         x = ceval(p).T
@@ -2534,8 +2534,8 @@ def load_gf_shelve(filename, G, ensfn=None, meshfn=None, filedir=None, force=Fal
         G.ensemble_point_counter = S['ensemble_point_counter']
 
         if F is not None:
-            G.EnsembleFieldFunction = F
-            G._create_ensemble_points()
+            G.ensemble_field_function = F
+            G.create_ensemble_points()
             G.triangulator.f = F
             G.set_field_parameters(S['field_parameters'])
         else:
@@ -2587,7 +2587,7 @@ class GeometricFieldJSONWriter(object):
 
     def _serialise_ens(self, gf_dict, ensfn, meshfn):
         if ensfn is not None:
-            self.gf.EnsembleFieldFunction.save_ensemble(
+            self.gf.ensemble_field_function.save_ensemble(
                 ensfn, mesh_filename=meshfn, path=self._file_dir
             )
             gf_dict['ensemble_field'] = os.path.split(ensfn)[1]
@@ -2660,10 +2660,10 @@ class GeometricFieldJSONReader(object):
 
     def _parse_ens(self, gf_dict, ensfn, meshfn):
         if ensfn is not None:
-            self.gf.EnsembleFieldFunction = EFF.load_ensemble(ensfn, meshfn, path=self._file_dir)
+            self.gf.ensemble_field_function = EFF.load_ensemble(ensfn, meshfn, path=self._file_dir)
         elif gf_dict.get['ensemble_field']:
             try:
-                self.gf.EnsembleFieldFunction = EFF.load_ensemble(gf_dict['ensemble_field'], meshfn,
+                self.gf.ensemble_field_function = EFF.load_ensemble(gf_dict['ensemble_field'], meshfn,
                                                                   path=self._file_dir)
             except IOError:
                 if self.force:
@@ -2674,9 +2674,9 @@ class GeometricFieldJSONReader(object):
         else:
             log.debug('WARNING: no ensemble field function loaded')
 
-        if self.gf.EnsembleFieldFunction is not None:
-            self.gf.triangulator.f = self.gf.EnsembleFieldFunction
-            self.gf._create_ensemble_points()
+        if self.gf.ensemble_field_function is not None:
+            self.gf.triangulator.f = self.gf.ensemble_field_function
+            self.gf.create_ensemble_points()
 
     def _parse_field_parameters(self, gf_dict):
         node_numbers = [int(k.split(' ')[1]) for k in gf_dict['field_parameters'].keys()]
@@ -2689,7 +2689,7 @@ class GeometricFieldJSONReader(object):
             for di, dk in enumerate(dim_keys):
                 p[di, ni, :] = [float(x) for x in node_dict[dk].split(' ')]
 
-        if self.gf.EnsembleFieldFunction is not None:
+        if self.gf.ensemble_field_function is not None:
             self.gf.set_field_parameters(p)
         else:
             self.gf.field_parameters = p
@@ -2717,7 +2717,7 @@ def load_geometric_field(filename, ensFilename=None, meshFilename=None, path=Non
     path: [str] path of the directory of the above files. If defined, the filenames
         above should not include the path to the file.
     """
-    gf = geometric_field('none', 1)
+    gf = GeometricField('none', 1)
     with open(filename, encoding='cp437') as f:
         head = f.read(1)
         if head == '{':

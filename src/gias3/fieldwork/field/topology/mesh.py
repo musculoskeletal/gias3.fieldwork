@@ -251,7 +251,7 @@ class MeshEnsemble:
             log.debug('sorted element points:', element_points)
         for element_point in element_points:
             # check if point has already been assigned a global number
-            if (element_point not in assigned):
+            if element_point not in assigned:
                 # record element points assigned
                 assigned += [element_point] + self.connectivity[element_point]
                 if self.debug:
@@ -414,7 +414,7 @@ class MeshEnsemble:
         if host_element in list(self.elements.keys()):
             if len(element_coordinates) == self.elements[host_element].dimensions:
                 # instantiate hanging_point
-                hp = hanging_point(host_element, element_coordinates)
+                hp = HangingPoint(host_element, element_coordinates)
 
                 # add hanging point to hanging_points dict and connectivity under element -1
                 self.hanging_points[self.hanging_point_counter] = hp
@@ -512,7 +512,7 @@ class MeshEnsemble:
 
 # hanging point object. Stored information about its host_element and
 # host element coordinates  
-class hanging_point:
+class HangingPoint:
     """ Class for holding information about a hanging_point (node)
     """
 
@@ -529,6 +529,7 @@ class hanging_point:
 
 # =============================================================================#
 def load_mesh_shelve(filename, mesh, filedir=None):
+    print('************ load mesh shelve.')
     if filedir is not None:
         filename = os.path.join(filedir, filename)
     else:
@@ -572,7 +573,7 @@ def load_mesh_shelve(filename, mesh, filedir=None):
 
     # create hanging_points
     for h in S['hanging_points']:
-        mesh.hanging_points[h[0]] = hanging_point(h[1], h[2])
+        mesh.hanging_points[h[0]] = HangingPoint(h[1], h[2])
 
     # set connectivity
     mesh.connectivity = S['connectivity']

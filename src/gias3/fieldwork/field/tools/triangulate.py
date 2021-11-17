@@ -250,7 +250,7 @@ def findDuplicatePointsTree(P):
 
             uniqueCount += 1
 
-    log.debug(uniqueCount, 'unique points')
+    log.debug(f"unique points: {uniqueCount}")
 
     return dupGroups, dupMap
 
@@ -287,7 +287,7 @@ def findDuplicatePoints2(P):
 
             uniqueCount += 1
 
-    log.debug(uniqueCount, 'unique points')
+    log.debug(f"unique points: {uniqueCount}")
 
     return dupGroups, dupMap
 
@@ -337,7 +337,7 @@ def findDuplicatePoints3(P):
         skip[nPoints - 1] = True
         uniqueCount += 1
 
-    log.debug(uniqueCount, 'unique points')
+    log.debug(f"unique points: {uniqueCount}")
 
     return dupGroups, dupMap
 

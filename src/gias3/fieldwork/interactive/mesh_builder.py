@@ -228,7 +228,7 @@ class Viewer(HasTraits):
         cEns.set_new_mesh('curve')
         cEns.create_elements(self.curveToAdd, 1)
         cEns.map_parameters()
-        c = geometric_field.geometric_field('curve', 3, ensemble_field_function=cEns)
+        c = geometric_field.GeometricField('curve', 3, ensemble_field_function=cEns)
 
         self.curve = c
         log.debug('pick curve start and end positions')
@@ -321,16 +321,16 @@ class Viewer(HasTraits):
                 scale_factor=self.dataScaleFactor
             )
 
-        if self.drawDataMesh and self.MB.simplemesh != None:
+        if self.drawDataMesh and self.MB.simplemesh is not None:
 
             if self.dataScalar is None:
-                renderArgs = {'color': (0.84705882, 0.8, 0.49803922)}
+                render_args = {'color': (0.84705882, 0.8, 0.49803922)}
                 self.sceneObjectDataMesh = self.scene.mlab.triangular_mesh(
                     self.MB.simplemesh.v[:, 0],
                     self.MB.simplemesh.v[:, 1],
                     self.MB.simplemesh.v[:, 2],
                     self.MB.simplemesh.f,
-                    **renderArgs
+                    **render_args
                 )
             else:
                 self.sceneObjectDataMesh = self.scene.mlab.triangular_mesh(
@@ -407,7 +407,7 @@ class MeshBuilder(object):
         self.GF = geometric_field.load_geometric_field(gf, ens, mesh)
 
     def initialiseGF(self, name, field_dim, gf_dim, elem_basis):
-        self.GF = geometric_field.geometric_field(
+        self.GF = geometric_field.GeometricField(
             name, gf_dim, field_dimensions=field_dim, field_basis=elem_basis
         )
 
@@ -474,7 +474,7 @@ class MeshBuilder(object):
             return
         else:
             # initialise curve p0
-            nNodes = curve.EnsembleFieldFunction.get_number_of_ensemble_points()
+            nNodes = curve.ensemble_field_function.get_number_of_ensemble_points()
             # assume lagrange
             if len(pathPoints) > nNodes:
                 # put initial nodes along path

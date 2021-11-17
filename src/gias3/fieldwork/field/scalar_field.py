@@ -491,7 +491,7 @@ class fitGeomFieldToScalar(object):
             p0 = self.dataS[closestDI][:, numpy.newaxis]
 
         # create a new field curvField to fit on the mesh ensemble
-        self.SF = scalarField(field_name, self.G.EnsembleFieldFunction, parameters=p0)
+        self.SF = scalarField(field_name, self.G.ensemble_field_function, parameters=p0)
         return self.SF
 
     def fitEPDP(self, eval_d):
