@@ -231,7 +231,7 @@ class point_picker_3D(object):
                       color=(1, 1, 0), scale_factor=0.2)
 
         if len(self.pickedPoints) == self.N:
-            if self.name != None:
+            if self.name is not None:
                 self.callback(list(self.pickedPoints), self.name)
             else:
                 self.callback(list(self.pickedPoints))
@@ -309,7 +309,7 @@ class element_adder_data(object):
         # initialise plot
         self.figure = mlab.figure(1, bgcolor=(0, 0, 0), size=(800, 800))
 
-        if self.gf.field_parameters != None:
+        if self.gf.field_parameters is not None:
             self.field_plot = self.gf._draw_surface_curvature(self.evalD, 'mean', self.gf.name, figure=self.figure)
             # ~ K,H,k1,k2 = self.gf.evaluate_curvature_in_mesh( self.evalD )
             # ~ self.field_plot = self.gf._draw_surface( 10, figure=self.figure, scalar=H, name=self.gf.name)
@@ -324,10 +324,10 @@ class element_adder_data(object):
                                                   data_mesh[1], scalars=data_scalar, figure=self.figure)
             self.plots['data'] = self.figure.children[-1]
         else:
-            if data != None:
+            if data is not None:
                 self.data = data
                 self.crawler = spline_tools.PointCrawlerData(self.data.T)
-                if data_scalar == None:
+                if data_scalar is None:
                     self.data_scalar = data_scalar
                     self.data_plot = mlab.points3d(data[0], data[1], data[2], mode='point', figure=self.figure,
                                                    scalars=data_scalar)

@@ -469,7 +469,7 @@ def two_quad_ring(number_of_quads, height=None, radius=None):
     ring.mapper.set_custom_ensemble_ordering(remap)
 
     # ==================================================================#
-    if height != None and radius != None:
+    if height is not None and radius is not None:
         # for quadratic quads, there are elements*2 nodes around the circle
         # generate coordinates for nodes
 
@@ -493,7 +493,7 @@ def two_quad_ring(number_of_quads, height=None, radius=None):
                 yparam.append([ycoords[i]])
                 zparam.append([float(zcoords[row])])
 
-        return (ring, xparam, yparam, zparam)
+        return ring, xparam, yparam, zparam
     else:
         return ring
 

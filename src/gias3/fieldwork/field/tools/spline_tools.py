@@ -539,7 +539,7 @@ class PointCrawlerData(object):
                 pOld = p
                 p, neighb = self._step(pOld)
                 pathCloud.append(neighb)
-                if p != None:
+                if p is not None:
                     d = euclidean(p, self.p2)
                     it += 1
                     if debug:
