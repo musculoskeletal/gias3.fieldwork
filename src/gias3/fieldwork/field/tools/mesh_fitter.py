@@ -384,14 +384,14 @@ class MeshFitter(object):
         rigidMode0X0 = scipy.hstack([rigidOpt, mode0Offset])
         rigidMode0Opt, rigidMode0POpt = pcFitter.rigidMode0Fit(
             gObj, x0=rigidMode0X0,
-            mWeight=self.PCFitmW
+            m_weight=self.PCFitmW
         )
         self.templateGF.set_field_parameters(rigidMode0POpt.reshape((3, -1, 1)))
 
         # rigid+modeN fit template gf
         rigidModeNOpt, rigidModeNPOpt = pcFitter.rigidModeNFit(
             gObj, modes=self.PCFitNModes,
-            x0=None, mWeight=self.PCFitmW,
+            x0=None, m_weight=self.PCFitmW,
             maxfev=0
         )
         self.templateGF.set_field_parameters(rigidModeNPOpt.reshape((3, -1, 1)))
