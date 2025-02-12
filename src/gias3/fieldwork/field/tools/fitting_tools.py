@@ -547,7 +547,7 @@ def fitBoundaryCurveDPEP(curve_gf, data, GD, sob_w, tangent_w, it_max=10, n_clos
     tangentSmoother = GFF.tangentSmoother(curve_gf.ensemble_field_function)
     nObj = tangentSmoother.makeObj()
 
-    gObj = GFF.makeObjDPEP(curve_gf, data, GD, dataWeights=None, n_closest_points=n_closest_points, tree_args=tree_args)
+    gObj = GFF.makeObjDPEP(curve_gf, data, GD, data_weights=None, n_closest_points=n_closest_points, tree_args=tree_args)
     obj = combObjGeomSobNormalStack(gObj, sobObj, nObj, 1.0, tangent_w)
 
     # initialise geometric field fitter
@@ -1049,9 +1049,9 @@ def fitSurfacePerItSearch(g_obj_type, GF, data, GD, sob_d, sob_w, normal_d, norm
             ep = GFEval(GF.get_field_parameters().ravel()).T
             fitData, fitDataI, fitDataDist = closestSearch(ep, data, 1, tree_args)
             if data_weights is not None:
-                gObj = gObjMakers['EPEP'](GF, fitData, GD, dataWeights=data_weights[fitDataI], evaluator=GFEval)
+                gObj = gObjMakers['EPEP'](GF, fitData, GD, data_weights=data_weights[fitDataI], evaluator=GFEval)
             else:
-                gObj = gObjMakers['EPEP'](GF, fitData, GD, dataWeights=None, evaluator=GFEval)
+                gObj = gObjMakers['EPEP'](GF, fitData, GD, data_weights=None, evaluator=GFEval)
         elif g_obj_type == 'DPEP':
             if sample_elems is None:
                 fitData = data
@@ -1063,11 +1063,11 @@ def fitSurfacePerItSearch(g_obj_type, GF, data, GD, sob_d, sob_w, normal_d, norm
                     ep = GF.discretiseAllElementsRegularGeoD(GD, geo_coordinates=True)[1]
 
                 fitEP, fitEPI, fitEPDist = closestSearch(data, ep, 1, tree_args)
-                gObj = gObjMakers['EPEP'](GF, fitData, GD, dataWeights=data_weights, epIndex=fitEPI)
+                gObj = gObjMakers['EPEP'](GF, fitData, GD, data_weights=data_weights, ep_index=fitEPI)
 
                 # minisation search
                 # ~ closestMPs, fitEP, fitEPDist = GF.find_closest_material_points( data, initGD=[10,10], verbose=True )
-                # ~ gObj = gObjMakers['EPEP']( GF, fitData, GD, dataWeights=dataWeights, matPoints=closestMPs )
+                # ~ gObj = gObjMakers['EPEP']( GF, fitData, GD, data_weights=data_weights, mat_points=closestMPs )
             else:
                 ep = np.vstack([GF.discretiseElementRegularGeoD(e, GD, geo_coords=True)[1] for e in sample_elems])
 
@@ -1341,12 +1341,12 @@ def hostMeshFitMultiPerItSearch(data, host_gf, slave_gf, slave_g_obj_type, slave
             fitData, fitDataI, fitDataDist = closestSearch(ep, data, 1, tree_args)
             if data_weights is not None:
                 slaveGObj = gObjMakers['EPEP'](slave_gf, fitData, slave_gd,
-                                               dataWeights=data_weights[fitDataI],
+                                               data_weights=data_weights[fitDataI],
                                                evaluator=slaveGFEval
                                                )
             else:
                 slaveGObj = gObjMakers['EPEP'](slave_gf, fitData, slave_gd,
-                                               dataWeights=None,
+                                               data_weights=None,
                                                evaluator=slaveGFEval
                                                )
         elif slave_g_obj_type == 'DPEP':
@@ -1355,8 +1355,8 @@ def hostMeshFitMultiPerItSearch(data, host_gf, slave_gf, slave_g_obj_type, slave
             ep = slave_gf.discretiseAllElementsRegularGeoD(slave_gd, geo_coordinates=True)[1]
             fitEP, fitEPI, fitEPDist = closestSearch(data, ep, 1, tree_args)
             slaveGObj = gObjMakers['EPEP'](slave_gf, fitData, slave_gd,
-                                           dataWeights=data_weights,
-                                           epIndex=fitEPI
+                                           data_weights=data_weights,
+                                           ep_index=fitEPI
                                            )
         else:
             raise ValueError('Unrecognised slaveGObj Type ' + slave_g_obj_type)
