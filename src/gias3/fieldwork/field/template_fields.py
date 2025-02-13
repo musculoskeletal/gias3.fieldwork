@@ -389,9 +389,9 @@ def three_quad_ring(number_of_quads, height, radius, debug=0):
 
     if height > 0.0 and radius > 0.0:
         # generate parameters
-        theta_t1 = scipy.linspace(0, scipy.pi * 2.0, elements * 4 + 1)
-        theta_t2 = scipy.linspace(0, scipy.pi * 2.0, elements * 3 + 1)
-        theta_t3 = scipy.linspace(0, scipy.pi * 2.0, elements * 2 + 1)
+        theta_t1 = scipy.linspace(0, scipy.constants.pi * 2.0, elements * 4 + 1)
+        theta_t2 = scipy.linspace(0, scipy.constants.pi * 2.0, elements * 3 + 1)
+        theta_t3 = scipy.linspace(0, scipy.constants.pi * 2.0, elements * 2 + 1)
         theta = [theta_t1, theta_t2, theta_t3]
         Z = scipy.linspace(0.0, height, 3)
 
@@ -479,7 +479,7 @@ def two_quad_ring(number_of_quads, height=None, radius=None):
             log.debug('ERROR: radius must be scalar or 3 long')
             return None
 
-        theta = scipy.linspace(0.0, 2.0 * scipy.pi, elements * 2 + 1)
+        theta = scipy.linspace(0.0, 2.0 * scipy.constants.pi, elements * 2 + 1)
         zcoords = scipy.linspace(0.0, height, 3)
         xparam = []
         yparam = []
@@ -525,8 +525,8 @@ def sphere(azimuth_divs, incline_divs, radius, inclination_max):
 
     # determine number of tiers in the upper hemisphere
     # assign tiers proportional to 90/inclination_max if inclination > 90
-    if inclination_max > scipy.pi / 2.0:
-        upper_tiers = int(round(incline_divs * (scipy.pi / 2.0) / inclination_max))
+    if inclination_max > scipy.constants.pi / 2.0:
+        upper_tiers = int(round(incline_divs * (scipy.constants.pi / 2.0) / inclination_max))
         lower_tiers = incline_divs - upper_tiers
     else:
         upper_tiers = incline_divs
@@ -535,7 +535,7 @@ def sphere(azimuth_divs, incline_divs, radius, inclination_max):
     # rings and their number of 3-tri quad elements
     ring_elements = {}
     ring_counter = 0
-    if inclination_max == scipy.pi:
+    if inclination_max == scipy.constants.pi:
         lower_rings = lower_tiers - 1
     else:
         lower_rings = lower_tiers
@@ -550,7 +550,7 @@ def sphere(azimuth_divs, incline_divs, radius, inclination_max):
     # add caps and rings
     # lower hemisphere, node ordering need to be reversed
     # if a full sphere
-    if inclination_max == scipy.pi:
+    if inclination_max == scipy.constants.pi:
         # lower cap first
         lower_cap = tri_hemisphere(0.0, azimuth_divs)
         # ~ remap = {0:6, 1:7, 2:8, 3:2, 4:0, 5:1, 6:9, 7:10, 8:3, 9:11, 10:12, 11:4, 12:13, 13:14, 14:5, 15:15}
@@ -601,7 +601,7 @@ def sphere(azimuth_divs, incline_divs, radius, inclination_max):
     # connect lower hemisphere
     element_i = 0
 
-    if inclination_max == scipy.pi:
+    if inclination_max == scipy.constants.pi:
         # connect lower cap to closest ring, or upper cap
         for i in range(azimuth_divs * 2):
             if not sphere.connect_element_points([(0, 1 + azimuth_divs + i), (1, i)]):
@@ -649,14 +649,14 @@ def sphere(azimuth_divs, incline_divs, radius, inclination_max):
     z_i = 0
 
     # if lower cap
-    if inclination_max == scipy.pi:
+    if inclination_max == scipy.constants.pi:
         # apex
         xparams.append([0.0])
         yparams.append([0.0])
         zparams.append([zcoords[0]])
 
         # 1st row of nodes
-        theta = scipy.linspace(0, 2.0 * scipy.pi, azimuth_divs + 1)
+        theta = scipy.linspace(0, 2.0 * scipy.constants.pi, azimuth_divs + 1)
         xcoords = radius * scipy.cos(theta) * scipy.sin(phi[1])
         ycoords = radius * scipy.sin(theta) * scipy.sin(phi[1])
 
@@ -671,7 +671,7 @@ def sphere(azimuth_divs, incline_divs, radius, inclination_max):
     for ring in range(lower_rings):
         # for each row of nodes (lower 2 rows)
         for row in range(2):
-            theta = scipy.linspace(0.0, 2.0 * scipy.pi, ring_elements[ring] * (row + 2) + 1)
+            theta = scipy.linspace(0.0, 2.0 * scipy.constants.pi, ring_elements[ring] * (row + 2) + 1)
             xcoords = radius * scipy.cos(theta) * scipy.sin(phi[z_i])
             ycoords = radius * scipy.sin(theta) * scipy.sin(phi[z_i])
 
@@ -686,7 +686,7 @@ def sphere(azimuth_divs, incline_divs, radius, inclination_max):
     for ring in range(upper_rings):
         # for each row of nodes (lower 2 rows)
         for row in range(2):
-            theta = scipy.linspace(0.0, 2.0 * scipy.pi, ring_elements[lower_rings + ring] * (4 - row) + 1)
+            theta = scipy.linspace(0.0, 2.0 * scipy.constants.pi, ring_elements[lower_rings + ring] * (4 - row) + 1)
             xcoords = radius * scipy.cos(theta) * scipy.sin(phi[z_i])
             ycoords = radius * scipy.sin(theta) * scipy.sin(phi[z_i])
 
@@ -699,7 +699,7 @@ def sphere(azimuth_divs, incline_divs, radius, inclination_max):
 
             # upper cap
     for row in range(2):
-        theta = scipy.linspace(0, 2.0 * scipy.pi, azimuth_divs * (2 - row) + 1)
+        theta = scipy.linspace(0, 2.0 * scipy.constants.pi, azimuth_divs * (2 - row) + 1)
         xcoords = radius * scipy.cos(theta) * scipy.sin(phi[z_i])
         ycoords = radius * scipy.sin(theta) * scipy.sin(phi[z_i])
 
@@ -796,8 +796,8 @@ def tri_hemisphere(radius, elements):
 
     if radius > 0.0:
         # generate parameters
-        theta = scipy.linspace(0, scipy.pi / 2.0, 3)
-        phi = scipy.linspace(0, scipy.pi * 2.0, elements * 2 + 1)
+        theta = scipy.linspace(0, scipy.constants.pi / 2.0, 3)
+        phi = scipy.linspace(0, scipy.constants.pi * 2.0, elements * 2 + 1)
         xparam = []
         yparam = []
         zparam = []
@@ -862,11 +862,11 @@ def four_tri_patch_hemisphere(radius, elements):
     # ==================================================================#
     if radius > 0.0:
         # generate parameters
-        theta = scipy.linspace(0.0, scipy.pi / 2.0, 5)
-        phi_t1 = scipy.linspace(0, scipy.pi * 2.0, elements * 4 + 1)
-        phi_t2 = scipy.linspace(0, scipy.pi * 2.0, elements * 3 + 1)
-        phi_t3 = scipy.linspace(0, scipy.pi * 2.0, elements * 2 + 1)
-        phi_t4 = scipy.linspace(0, scipy.pi * 2.0, elements * 1 + 1)
+        theta = scipy.linspace(0.0, scipy.constants.pi / 2.0, 5)
+        phi_t1 = scipy.linspace(0, scipy.constants.pi * 2.0, elements * 4 + 1)
+        phi_t2 = scipy.linspace(0, scipy.constants.pi * 2.0, elements * 3 + 1)
+        phi_t3 = scipy.linspace(0, scipy.constants.pi * 2.0, elements * 2 + 1)
+        phi_t4 = scipy.linspace(0, scipy.constants.pi * 2.0, elements * 1 + 1)
         phi = [phi_t1, phi_t2, phi_t3, phi_t4]
         xparam = []
         yparam = []
@@ -1074,7 +1074,7 @@ def _two_quad_ring_remapper(elements):
 
 # head and neck =======================================================#
 
-def head_neck(h_r, n_l, n_r=None, h_adiv=5, h_idiv=3, h_maxi=3.0 / 4.0 * scipy.pi, n_ldiv=1):
+def head_neck(h_r, n_l, n_r=None, h_adiv=5, h_idiv=3, h_maxi=3.0 / 4.0 * scipy.constants.pi, n_ldiv=1):
     """ A truncated 3/4 sphere(head) and a truncated cone (neck)
         origin at centre of sphere
         parameters:     h_r = head radius
